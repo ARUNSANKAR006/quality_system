@@ -36,20 +36,18 @@ export default function ImageUpload() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 flex items-center justify-center px-4 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-green-100 flex flex-col items-center justify-center px-4">
       <motion.div
-        className="bg-white/10 backdrop-blur-md shadow-2xl rounded-3xl p-8 max-w-md w-full border border-white/20"
-        initial={{ opacity: 0, y: 30 }}
+        className="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full"
+        initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-4xl font-extrabold text-white text-center mb-6 drop-shadow-lg">
-          AI Defect Detector
-        </h1>
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">Defect Detection</h1>
 
-        <label className="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-white/30 py-6 rounded-2xl mb-4 bg-white/5 hover:bg-white/10 transition">
-          <UploadCloud className="w-10 h-10 text-white mb-2" />
-          <span className="text-white font-medium">Click or Drop an image</span>
+        <label className="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 py-6 rounded-xl mb-4 hover:bg-gray-50">
+          <UploadCloud className="w-8 h-8 text-blue-600 mb-2" />
+          <span className="text-gray-600">Click to select an image</span>
           <input type="file" className="hidden" onChange={handleFileChange} />
         </label>
 
@@ -58,36 +56,32 @@ export default function ImageUpload() {
             key={preview}
             src={preview}
             alt="Preview"
-            className="w-full h-52 object-contain mb-4 rounded-xl border border-white/30 bg-white/10"
+            className="w-full h-48 object-contain mb-4 rounded-lg border border-gray-200"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.3 }}
           />
         )}
 
         <button
           onClick={handleUpload}
-          className="w-full py-3 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-blue-500 hover:to-purple-600 text-white font-bold rounded-xl shadow-lg transition duration-300 flex items-center justify-center"
+          className="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-xl font-semibold transition duration-300 flex items-center justify-center"
         >
-          {loading && <LoaderCircle className="animate-spin mr-2" />}
-          {loading ? 'Analyzing...' : 'Predict Defect'}
+          {loading ? <LoaderCircle className="animate-spin mr-2" /> : null}
+          {loading ? 'Predicting...' : 'Predict'}
         </button>
 
         {result && (
           <motion.div
             className={`mt-6 text-center p-4 rounded-xl ${
-              result.prediction === 'defective'
-                ? 'bg-red-500/20 text-red-200 border border-red-300/30'
-                : 'bg-green-500/20 text-green-200 border border-green-300/30'
+              result.prediction === 'defective' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
             }`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <p className="text-2xl font-bold tracking-wide">
-              {result.prediction.toUpperCase()}
-            </p>
-            <p className="text-sm opacity-80">Confidence: {(result.confidence * 100).toFixed(2)}%</p>
+            <p className="text-xl font-semibold">{result.prediction.toUpperCase()}</p>
+            <p className="text-sm">Confidence: {(result.confidence * 100).toFixed(2)}%</p>
           </motion.div>
         )}
       </motion.div>
