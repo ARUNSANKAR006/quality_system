@@ -1,5 +1,6 @@
-/* src/styles.css or src/index.css */
-
+/* index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+

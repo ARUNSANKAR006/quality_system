@@ -1,59 +1,58 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-from flask_cors import CORS
-import json
+import io
 
-# Initialize Flask app
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable CORS for all routes
 
-# Load trained model
+# Load the trained model
 model = tf.keras.models.load_model('defect_detection_model.h5')
 
-# Load class indices (e.g., {"normal": 0, "defective": 1})
-with open('class_indices.json', 'r') as f:
-    class_indices = json.load(f)
+# Set class names (based on alphabetical order of folders)
+class_names = ['defective', 'normal']
 
-# Reverse to get index → label mapping
-index_to_label = {v: k for k, v in class_indices.items()}
-
-# Preprocessing function
-def preprocess_image(file, target_size=(128, 128)):  # change to (224, 224) if needed
-    img = Image.open(file).convert('RGB')
-    img = img.resize(target_size)
-    img_array = np.array(img) / 255.0  # Normalize
-    img_array = np.expand_dims(img_array, axis=0)  # (1, H, W, 3)
+def preprocess_image(image_bytes):
+    img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+    img = img.resize((128, 128))  # match model input size
+    img_array = np.array(img) / 255.0  # normalize
+    img_array = np.expand_dims(img_array, axis=0)  # batch dimension
     return img_array
 
-# Prediction route
 @app.route('/predict', methods=['POST'])
 def predict():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+    file = request.files['file']
+    print(f"✅ Received file: {file.filename}")
+
     try:
-        if 'file' not in request.files:
-            return jsonify({'error': 'No file provided'}), 400
+        img_array = preprocess_image(file.read())
 
-        file = request.files['file']
-        print("Received file:", file.filename)
+        # Get prediction
+        pred = model.predict(img_array)
+        confidence = float(pred[0][0])
 
-        img_array = preprocess_image(file)
+        # Use threshold to decide label
+        if confidence < 0.5:
+            label = class_names[0]  # defective
+            confidence = 1 - confidence
+        else:
+            label = class_names[1]  # normal
 
-        predictions = model.predict(img_array)
-        predicted_index = np.argmax(predictions[0])
-        confidence = float(predictions[0][predicted_index])
-        predicted_label = index_to_label[predicted_index]
+        print(f"🔍 Prediction: {label}, Confidence: {confidence:.4f}")
 
-        print(f"Prediction: {predicted_label}, Confidence: {confidence}")
         return jsonify({
-            'prediction': predicted_label,
+            'prediction': label,
             'confidence': round(confidence, 4)
         })
 
     except Exception as e:
-        print("Error during prediction:", str(e))
-        return jsonify({'error': str(e)}), 500
+        print("❌ Error during prediction:", str(e))
+        return jsonify({'error': 'Prediction failed'}), 500
 
-# Run the server
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)

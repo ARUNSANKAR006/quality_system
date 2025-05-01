@@ -1,87 +1,97 @@
-import os
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+"""  import React, { useState } from 'react';
+ import { motion } from 'framer-motion';
+ import { UploadCloud, LoaderCircle } from 'lucide-react';
 
-# Dataset paths
-train_dir = "dataset/train"
-val_dir = "dataset/val"
+ export default function ImageUpload() {
+   const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+   const [result, setResult] = useState(null);
+   const [loading, setLoading] = useState(false);
 
-# Parameters
-img_size = (128, 128)
-batch_size = 32
-epochs = 20
+#   const handleFileChange = (e) => {
+#     const selected = e.target.files[0];
+#     setFile(selected);
+#     setPreview(URL.createObjectURL(selected));
+#     setResult(null);
+#   };
 
-# Data augmentation for training
-train_datagen = ImageDataGenerator(
-    rescale=1./255,
-    rotation_range=15,
-    zoom_range=0.1,
-    width_shift_range=0.1,
-    height_shift_range=0.1,
-    horizontal_flip=True
-)
+#   const handleUpload = async () => {
+#     if (!file) return;
+#     setLoading(true);
+#     const formData = new FormData();
+#     formData.append('file', file);
 
-# Only rescaling for validation
-val_datagen = ImageDataGenerator(rescale=1./255)
+#     try {
+#       const res = await fetch('http://localhost:5000/predict', {
+#         method: 'POST',
+#         body: formData,
+#       });
+#       const data = await res.json();
+#       setResult(data);
+#     } catch (err) {
+#       alert('Prediction failed. Please check backend!');
+#     } finally {
+#       setLoading(false);
+#     }
+#   };
 
-# Load datasets
-train_generator = train_datagen.flow_from_directory(
-    train_dir,
-    target_size=img_size,
-    batch_size=batch_size,
-    class_mode='binary'
-)
+#   return (
+#     <div className="min-h-screen bg-gradient-to-r from-purple-600 via-pink-500 to-yellow-400 flex items-center justify-center px-4 font-sans">
+#       <motion.div
+#         className="bg-white/10 backdrop-blur-md shadow-2xl rounded-3xl p-8 max-w-md w-full border border-white/20"
+#         initial={{ opacity: 0, y: 30 }}
+#         animate={{ opacity: 1, y: 0 }}
+#         transition={{ duration: 0.5 }}
+#       >
+#         <h1 className="text-4xl font-extrabold text-white text-center mb-6 drop-shadow-lg">
+#           AI Defect Detector
+#         </h1>
 
-val_generator = val_datagen.flow_from_directory(
-    val_dir,
-    target_size=img_size,
-    batch_size=batch_size,
-    class_mode='binary'
-)
+#         <label className="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-white/30 py-6 rounded-2xl mb-4 bg-white/5 hover:bg-white/10 transition">
+#           <UploadCloud className="w-10 h-10 text-white mb-2" />
+#           <span className="text-white font-medium">Click or Drop an image</span>
+#           <input type="file" className="hidden" onChange={handleFileChange} />
+#         </label>
 
-# Define CNN model
-model = Sequential([
-    Input(shape=(128, 128, 3)),
-    Conv2D(32, (3, 3), activation='relu'),
-    MaxPooling2D(2, 2),
-    
-    Conv2D(64, (3, 3), activation='relu'),
-    MaxPooling2D(2, 2),
-    
-    Conv2D(128, (3, 3), activation='relu'),
-    MaxPooling2D(2, 2),
-    
-    Dropout(0.25),
-    Flatten(),
-    Dense(64, activation='relu'),
-    Dropout(0.5),
-    Dense(1, activation='sigmoid')  # Binary classification
-])
+#         {preview && (
+#           <motion.img
+#             key={preview}
+#             src={preview}
+#             alt="Preview"
+#             className="w-full h-52 object-contain mb-4 rounded-xl border border-white/30 bg-white/10"
+#             initial={{ scale: 0.8, opacity: 0 }}
+#             animate={{ scale: 1, opacity: 1 }}
+#             transition={{ duration: 0.4 }}
+#           />
+#         )}
 
-# Compile model
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+#         <button
+#           onClick={handleUpload}
+#           className="w-full py-3 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-blue-500 hover:to-purple-600 text-white font-bold rounded-xl shadow-lg transition duration-300 flex items-center justify-center"
+#         >
+#           {loading && <LoaderCircle className="animate-spin mr-2" />}
+#           {loading ? 'Analyzing...' : 'Predict Defect'}
+#         </button>
 
-# Callbacks
-early_stop = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
-checkpoint = ModelCheckpoint("best_model.h5", save_best_only=True)
-
-print(f"🔍 Found {train_generator.samples} training images.")
-print(f"🔍 Found {val_generator.samples} validation images.")
-
-
-# Train model
-history = model.fit(
-    train_generator,
-    validation_data=val_generator,
-    epochs=epochs,
-    callbacks=[early_stop, checkpoint]
-)
-
-# Save final model
-model.save("defect_detection_model.h5")
-print("✅ Model saved as defect_detection_model.h5")
-
-print(train_generator.class_indices)
-
+#         {result && (
+#           <motion.div
+#             className={`mt-6 text-center p-4 rounded-xl ${
+#               result.prediction === 'defective'
+#                 ? 'bg-red-500/20 text-red-200 border border-red-300/30'
+#                 : 'bg-green-500/20 text-green-200 border border-green-300/30'
+#             }`}
+#             initial={{ opacity: 0, y: 20 }}
+#             animate={{ opacity: 1, y: 0 }}
+#             transition={{ duration: 0.4 }}
+#           >
+#             <p className="text-2xl font-bold tracking-wide">
+#               {result.prediction.toUpperCase()}
+#             </p>
+#             <p className="text-sm opacity-80">Confidence: {(result.confidence * 100).toFixed(2)}%</p>
+#           </motion.div>
+#         )}
+#       </motion.div>
+#     </div>
+#   );
+# }
+ """

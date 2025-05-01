@@ -1,0 +1,13 @@
+/* index.css or styles.css */
+body {
+    @apply bg-gray-50 font-sans text-gray-800;
+  }
+  
+  button {
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  button:hover {
+    @apply bg-indigo-700 transform scale-105;
+  }
+  
