@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { color, motion } from 'framer-motion';
 import { UploadCloud, LoaderCircle } from 'lucide-react';
 
 export default function ImageUpload() {
