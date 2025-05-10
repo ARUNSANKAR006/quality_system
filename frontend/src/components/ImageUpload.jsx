@@ -6,17 +6,20 @@ const ImageUpload = () => {
   const [image, setImage] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null); 
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     setImage(e.target.files[0]);
     setPrediction(null);
+    setError(null);
   };
 
   const handleUpload = async () => {
     if (!image) return alert("Please select an image");
 
     setLoading(true);
+    setError(null);
     const formData = new FormData();
     formData.append("file", image);
 
@@ -30,7 +33,7 @@ const ImageUpload = () => {
       setPrediction(data);
     } catch (error) {
       console.error("Prediction failed:", error);
-      alert("Prediction failed");
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -134,6 +137,14 @@ const ImageUpload = () => {
               )}
             </div>
           )}
+
+          {/* Error Message */}
+          {error && (
+            <div className="mt-4 text-sm text-red-600 font-medium">
+                ❌ {error}
+            </div>
+          )}
+
         </div>
       </div>
     </div>
