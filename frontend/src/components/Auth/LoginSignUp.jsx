@@ -1,17 +1,59 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './LoginSignUp.css'
+import './LoginSignUp.css';
 
 function LoginSignUp() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
-  const handleLogin = () => {
-    // Add your login logic here
-    // If login is successful, redirect to ImageUpload page
-    // For now, let's assume login is always successful
-    navigate('/image-upload');
+  const handleLogin = async () => {
+    setErrorMsg('');
+    try {
+      const res = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        navigate('/image-upload');
+      } else {
+        setErrorMsg(data.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrorMsg('Server error. Try again.');
+    }
+  };
+
+  const handleSignup = async () => {
+    setErrorMsg('');
+    try {
+      const res = await fetch('http://localhost:5000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('Registration successful! You can now login.');
+      } else {
+        setErrorMsg(data.message || 'Sign up failed');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      setErrorMsg('Server error. Try again.');
+    }
   };
 
   return (
@@ -33,9 +75,9 @@ function LoginSignUp() {
           required
         />
         <button type="button" onClick={handleLogin}>Login</button>
-        {/* If you want the sign up feature, add a sign-up function here */}
         <h5 className='h5'>Don't have an account ?</h5>
-        <button className="signup" type="button">Sign Up</button>
+        <button className="signup" type="button" onClick={handleSignup}>Sign Up</button>
+        {errorMsg && <p className="error-msg">❌ {errorMsg}</p>}
       </form>
     </div>
   );
