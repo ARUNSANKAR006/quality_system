@@ -1,17 +1,16 @@
-import React from 'react'
-import Login from './components/Login'
-import ImageUpload from './components/ImageUpload'
-
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import LoginSignup from "./components/Auth/LoginSignUp";
+//import Dashboard from "./components/Dashboard"; // create this later
 
 function App() {
   return (
-    <Login />
-    /* <{/* div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Login/>
-      
-    </div> */
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginSignup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
