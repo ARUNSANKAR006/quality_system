@@ -1,5 +1,7 @@
 import React from 'react'
+import Login from './components/Login'
 import ImageUpload from './components/ImageUpload'
+
 
 
 function App() {
