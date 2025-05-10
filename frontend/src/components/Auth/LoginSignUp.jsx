@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import './LoginSignUp.css'
 
 function LoginSignUp() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function LoginSignUp() {
 
   return (
     <div className="login-signup-container">
-      <h1>Login or Sign Up</h1>
+      <h1>Login or SignUp</h1>
       <form onSubmit={e => e.preventDefault()}>
         <input
           type="email"
@@ -33,7 +34,8 @@ function LoginSignUp() {
         />
         <button type="button" onClick={handleLogin}>Login</button>
         {/* If you want the sign up feature, add a sign-up function here */}
-        <button type="button">Sign Up</button>
+        <h5 className='h5'>Don't have an account ?</h5>
+        <button className="signup" type="button">Sign Up</button>
       </form>
     </div>
   );
