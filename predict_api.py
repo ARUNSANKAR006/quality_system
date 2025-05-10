@@ -35,13 +35,21 @@ def preprocess_image(image_bytes):
     except Exception as e:
         raise ValueError(f"Error processing image: {e}")
 
-def generate_gradcam(model, img_array, last_conv_layer_name="out_relu"):
+def generate_gradcam(model, img_array, base_model_name="mobilenetv2_1.00_224", conv_layer_name="out_relu"):
     try:
-        # Directly get the correct convolution layer from full model
-        last_conv_layer = model.get_layer(last_conv_layer_name)
+        # Get base model
+        base_model = model.get_layer(base_model_name)
+        
+        # Call base_model at least once to build it
+        _ = base_model(img_array)
 
+        # Get the last conv layer from base_model
+        last_conv_layer = base_model.get_layer(conv_layer_name)
+
+        # Grad model from full model input to conv_output and model output
         grad_model = tf.keras.models.Model(
-            [model.inputs], [last_conv_layer.output, model.output]
+            [model.inputs],
+            [last_conv_layer.output, model.output]
         )
 
         with tf.GradientTape() as tape:
@@ -61,8 +69,11 @@ def generate_gradcam(model, img_array, last_conv_layer_name="out_relu"):
         heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
 
         return heatmap
+
     except Exception as e:
         raise RuntimeError(f"Error generating Grad-CAM: {e}")
+
+
 
 @app.route("/predict", methods=["POST"])
 def predict():
