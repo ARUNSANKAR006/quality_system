@@ -8,7 +8,7 @@ CORS(app)
 
 USERS_FILE = 'users.json'
 
-# Load existing users or create file
+# Ensure users file exists
 if not os.path.exists(USERS_FILE):
     with open(USERS_FILE, 'w') as f:
         json.dump({}, f)
@@ -19,13 +19,19 @@ def load_users():
 
 def save_users(users):
     with open(USERS_FILE, 'w') as f:
-        json.dump(users, f)
+        json.dump(users, f, indent=2)
 
 @app.route('/register', methods=['POST'])
 def register():
-    data = request.json
+    data = request.get_json()
     username = data.get('username')
     password = data.get('password')
+
+    if not username or not password:
+        return jsonify({"message": "Username and password required"}), 400
+
+    if len(password) < 8:
+        return jsonify({"message": "Password must be at least 8 characters"}), 400
 
     users = load_users()
     if username in users:
@@ -33,16 +39,25 @@ def register():
 
     users[username] = password
     save_users(users)
+    print(f"[REGISTER] Registered user: {username}")
     return jsonify({"message": "Registration successful"}), 200
 
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.json
+    data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
+    if not username or not password:
+        return jsonify({"message": "Username and password required"}), 400
+
     users = load_users()
-    if users.get(username) == password:
+    stored_password = users.get(username)
+    print(f"[LOGIN] Attempting login for: {username}")
+    print(f"[LOGIN] Provided password: {password}")
+    print(f"[LOGIN] Stored password: {stored_password}")
+
+    if stored_password == password:
         return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
