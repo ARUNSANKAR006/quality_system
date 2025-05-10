@@ -15,10 +15,6 @@ try:
     MODEL_PATH = "fabric_model.h5"
     model = tf.keras.models.load_model(MODEL_PATH)
     print(f"✅ Model loaded successfully from: {MODEL_PATH}")
-    
-    base_model = model.get_layer('mobilenetv2_1.00_224')
-    last_conv_layer = base_model.get_layer('out_relu')  # ✅ Correct Grad-CAM layer
-
 except Exception as e:
     print(f"❌ Error loading model: {str(e)}")
     model = None
@@ -39,11 +35,10 @@ def preprocess_image(image_bytes):
     except Exception as e:
         raise ValueError(f"Error processing image: {e}")
 
-def generate_gradcam(model, img_array, last_conv_layer_name="mobilenetv2_1.00_224"):
+def generate_gradcam(model, img_array, last_conv_layer_name="out_relu"):
     try:
-        # Get the correct convolutional base and layer
-        base_model = model.get_layer(last_conv_layer_name)
-        last_conv_layer = base_model.get_layer("out_relu")
+        # Directly get the correct convolution layer from full model
+        last_conv_layer = model.get_layer(last_conv_layer_name)
 
         grad_model = tf.keras.models.Model(
             [model.inputs], [last_conv_layer.output, model.output]
