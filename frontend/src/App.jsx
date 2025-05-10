@@ -1,13 +1,14 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginSignup from "./components/Auth/LoginSignUp";
-//import Dashboard from "./components/Dashboard"; // create this later
+// src/App.jsx
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LoginSignup from './components/Auth/LoginSignUp';
+import ImageUpload from './components/ImageUpload';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginSignup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/upload" element={<ImageUpload />} />
       </Routes>
     </BrowserRouter>
   );

@@ -12,7 +12,7 @@ const LoginSignup = () => {
     // Simulated login/signup logic
     if (userID && password) {
       localStorage.setItem("user", userID);
-      navigate("/dashboard"); // go to next page
+      navigate("/Dashboard"); // go to next page
     }
   };
 
@@ -33,6 +33,7 @@ const LoginSignup = () => {
           onChange={(e) => setUserID(e.target.value)}
         />
         <input
+          style={{margin:10}}
           type="password"
           placeholder="Password"
           className="w-full mb-4 p-2 border rounded"
