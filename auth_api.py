@@ -24,36 +24,36 @@ def save_users(users):
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
 
-    if not username or not password:
-        return jsonify({"message": "Username and password required"}), 400
+    if not email or not password:
+        return jsonify({"message": "Email and password required"}), 400
 
     if len(password) < 8:
         return jsonify({"message": "Password must be at least 8 characters"}), 400
 
     users = load_users()
-    if username in users:
+    if email in users:
         return jsonify({"message": "User already exists"}), 400
 
-    users[username] = password
+    users[email] = password
     save_users(users)
-    print(f"[REGISTER] Registered user: {username}")
+    print(f"[REGISTER] Registered user: {email}")
     return jsonify({"message": "Registration successful"}), 200
 
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
 
-    if not username or not password:
-        return jsonify({"message": "Username and password required"}), 400
+    if not email or not password:
+        return jsonify({"message": "Email and password required"}), 400
 
     users = load_users()
-    stored_password = users.get(username)
-    print(f"[LOGIN] Attempting login for: {username}")
+    stored_password = users.get(email)
+    print(f"[LOGIN] Attempting login for: {email}")
     print(f"[LOGIN] Provided password: {password}")
     print(f"[LOGIN] Stored password: {stored_password}")
 
