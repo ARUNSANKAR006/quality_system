@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginSignup from "./components/Auth/LoginSignUp";
+import LoginSignUp from "./components/Auth/LoginSignup";
 import ImageUpload from "./components/ImageUpload";
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/* Login or Signup Page */}
-        <Route path="/" element={<LoginSignup />} />
+        <Route path="/" element={<LoginSignUp />} />
 
         {/* Image Upload Page (after login) */}
         <Route path="/upload" element={<ImageUpload />} />
