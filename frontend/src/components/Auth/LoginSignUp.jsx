@@ -9,7 +9,8 @@ function LoginSignUp() {
   const handleLogin = () => {
     // Add your login logic here
     // If login is successful, redirect to ImageUpload page
-    navigate('/ImageUpload');
+    // For now, let's assume login is always successful
+    navigate('/image-upload');
   };
 
   return (
@@ -31,6 +32,7 @@ function LoginSignUp() {
           required
         />
         <button type="button" onClick={handleLogin}>Login</button>
+        {/* If you want the sign up feature, add a sign-up function here */}
         <button type="button">Sign Up</button>
       </form>
     </div>
