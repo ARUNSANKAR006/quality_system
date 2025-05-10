@@ -63,7 +63,7 @@ model = Sequential([
     Dropout(0.3),
     Dense(128, activation='relu'),
     Dropout(0.2),
-    Dense(3, activation='softmax')
+    Dense(2, activation='softmax')
 ])
 
 model.compile(optimizer=Adam(learning_rate=1e-4),
