@@ -24,6 +24,7 @@ def save_users(users):
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
+    print("Received data:", data)
     email = data.get('email')
     password = data.get('password')
 
@@ -45,6 +46,7 @@ def register():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
+    print("Received data:", data)
     email = data.get('email')
     password = data.get('password')
 
