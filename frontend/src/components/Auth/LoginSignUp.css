@@ -1,3 +1,10 @@
+body{
+    margin: 0;
+    
+
+}
+
+
 /* Apply the background image to the whole page */
 .login-signup-container {
   background-image: url('C:\project\quality_system\frontend\src\assets\background.jpg');  /* Path to your background image */
@@ -14,7 +21,7 @@
   text-align: center;
 }
 
-h1 {
+.login-signup-container h1 {
   margin-bottom: 20px;
   border: solid 1px black;
   background-color:black;
@@ -54,7 +61,7 @@ input {
 
 button {
   display: inline-block;
-  background-color: #4CAF50;
+  background-color: purple;
   color: white;
   margin-top:2px ;
   padding: 10px 20px;
@@ -68,7 +75,7 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: purple;
   background-blend-mode: lighten;
 }
 
@@ -82,7 +89,6 @@ button:hover {
 
 .signup{
     position: relative;
-    left: 100px;
-    right: 50px;
-    bottom: 70px;
+    left: 70px;
+    bottom: 55px;
 }
