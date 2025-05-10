@@ -17,12 +17,8 @@ try:
     print(f"✅ Model loaded successfully from: {MODEL_PATH}")
     
     base_model = model.get_layer('mobilenetv2_1.00_224')
-    
-    last_conv_layer = base_model.get_layer('out_relu')
-    #for i, layer in enumerate(base_model.layers):
-        #print(f"{i}: {layer.name}")*/
-        
-        
+    last_conv_layer = base_model.get_layer('out_relu')  # ✅ Correct Grad-CAM layer
+
 except Exception as e:
     print(f"❌ Error loading model: {str(e)}")
     model = None
@@ -43,10 +39,12 @@ def preprocess_image(image_bytes):
     except Exception as e:
         raise ValueError(f"Error processing image: {e}")
 
-def generate_gradcam(model, img_array, last_conv_layer_name="out_relu"):
+def generate_gradcam(model, img_array, last_conv_layer_name="mobilenetv2_1.00_224"):
     try:
-        last_conv_layer = model.get_layer(last_conv_layer_name)
-        
+        # Get the correct convolutional base and layer
+        base_model = model.get_layer(last_conv_layer_name)
+        last_conv_layer = base_model.get_layer("out_relu")
+
         grad_model = tf.keras.models.Model(
             [model.inputs], [last_conv_layer.output, model.output]
         )
