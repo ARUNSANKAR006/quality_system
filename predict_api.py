@@ -15,6 +15,12 @@ try:
     MODEL_PATH = "fabric_model.h5"
     model = tf.keras.models.load_model(MODEL_PATH)
     print(f"✅ Model loaded successfully from: {MODEL_PATH}")
+    
+    base_model = model.get_layer('mobilenetv2_1.00_224')
+    for i, layer in enumerate(base_model.layers):
+        print(f"{i}: {layer.name}")
+        
+        
 except Exception as e:
     print(f"❌ Error loading model: {str(e)}")
     model = None
@@ -35,7 +41,7 @@ def preprocess_image(image_bytes):
     except Exception as e:
         raise ValueError(f"Error processing image: {e}")
 
-def generate_gradcam(model, img_array, last_conv_layer_name="conv_pw_13_relu"):
+def generate_gradcam(model, img_array, last_conv_layer_name="conv_1_relu"):
     try:
         grad_model = tf.keras.models.Model(
             [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
