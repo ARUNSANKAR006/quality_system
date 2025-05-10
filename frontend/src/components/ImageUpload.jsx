@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ImageUpload = () => {
   const [image, setImage] = useState(null);
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     setImage(e.target.files[0]);
@@ -33,25 +35,43 @@ const ImageUpload = () => {
     }
   };
 
-  return (
-    <div className="flex flex-col items-center p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-4">🧠 Fabric Defect Detector</h1>
+  const handleLogout = () => {
+    navigate("/"); // Go back to login page
+  };
 
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center relative py-10 px-4">
+      {/* Logout Button */}
+      <div className="absolute top-4 right-4">
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow"
+        >
+          Logout
+        </button>
+      </div>
+
+      {/* Title */}
+      <h1 className="text-3xl font-bold mb-6 text-center">🧠 Fabric Defect Detector</h1>
+
+      {/* File input */}
       <input
         type="file"
         accept="image/*"
         onChange={handleFileChange}
-        className="mb-4"
+        className="mb-4 border p-2 rounded bg-white shadow"
       />
 
+      {/* Preview */}
       {image && (
         <img
           src={URL.createObjectURL(image)}
           alt="Uploaded"
-          className="w-64 h-64 object-cover mb-4 rounded shadow"
+          className="w-64 h-64 object-cover mb-4 rounded shadow-lg border"
         />
       )}
 
+      {/* Upload Button */}
       <button
         onClick={handleUpload}
         className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-2 rounded shadow"
@@ -59,21 +79,31 @@ const ImageUpload = () => {
         {loading ? "Analyzing..." : "Predict Defect"}
       </button>
 
+      {/* Loading Text */}
       {loading && (
         <div className="mt-4 text-gray-700 animate-pulse">
           ⏳ Checking fabric...
         </div>
       )}
 
+      {/* Prediction Result */}
       {prediction && (
-        <div className="mt-6 bg-white p-4 rounded shadow-lg text-center">
-          <h2 className="text-xl font-semibold" style={{paddingTop:20}}>
+        <div className="mt-6 bg-white p-4 rounded shadow-lg text-center max-w-md w-full">
+          <h2 className="text-xl font-semibold pt-4">
             Result 🔍:{" "}
-            <span className={`font-bold ${prediction.prediction === "defective" ? "text-red-600" : "text-green-600"}`}>
+            <span
+              className={`font-bold ${
+                prediction.prediction === "defective"
+                  ? "text-red-600"
+                  : "text-green-600"
+              }`}
+            >
               {prediction.prediction.toUpperCase()}
             </span>
           </h2>
-          <p className="text-gray-700" style={{paddingTop:20}}>Confidence 📈: {prediction.confidence}%</p>
+          <p className="text-gray-700 pt-4">
+            Confidence 📈: {prediction.confidence}%
+          </p>
         </div>
       )}
     </div>
