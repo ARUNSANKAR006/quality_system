@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UploadCloud } from 'lucide-react'; // For icon
 
 const ImageUpload = () => {
   const [image, setImage] = useState(null);
@@ -36,76 +37,95 @@ const ImageUpload = () => {
   };
 
   const handleLogout = () => {
-    navigate("/"); // Go back to login page
+    navigate("/");
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center relative py-10 px-4">
-      {/* Logout Button */}
-      <div className="absolute top-4 right-4">
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow"
-        >
-          Logout
-        </button>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Top Navbar */}
+      <div className="w-full px-6 py-4 flex justify-between items-center shadow bg-white">
+        <h1 className="text-xl font-bold text-blue-700">Fabric Defect Detector</h1>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-semibold">Inspector</span>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
-      {/* Title */}
-      <h1 className="text-3xl font-bold mb-6 text-center">🧠 Fabric Defect Detector</h1>
+      {/* Main Card Centered */}
+      <div className="flex flex-1 justify-center items-center px-4 py-10">
+        <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-xl text-center">
+          {/* Header */}
+          <div className="flex flex-col items-center mb-6">
+            <div className="text-indigo-600 text-4xl mb-2">
+              🧵
+            </div>
+            <h2 className="text-2xl font-bold">Textile Defect Inspection</h2>
+            <p className="text-gray-500 mt-1 text-sm">
+              Upload a fabric image to check for defects using AI.
+            </p>
+          </div>
 
-      {/* File input */}
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="mb-4 border p-2 rounded bg-white shadow"
-      />
+          {/* Upload Section */}
+          <label
+            htmlFor="fileInput"
+            className="border-2 border-dashed border-gray-300 rounded-lg p-6 cursor-pointer hover:border-blue-400 transition-colors flex flex-col items-center mb-4"
+          >
+            <UploadCloud className="h-8 w-8 text-gray-400 mb-2" />
+            <p className="text-gray-600 text-sm">
+              Drag & drop your fabric image here, or click to upload
+            </p>
+            <input
+              id="fileInput"
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+          </label>
 
-      {/* Preview */}
-      {image && (
-        <img
-          src={URL.createObjectURL(image)}
-          alt="Uploaded"
-          className="w-64 h-64 object-cover mb-4 rounded shadow-lg border"
-        />
-      )}
+          {/* Preview */}
+          {image && (
+            <img
+              src={URL.createObjectURL(image)}
+              alt="Uploaded"
+              className="w-64 h-64 object-cover mx-auto mb-4 rounded-lg border shadow"
+            />
+          )}
 
-      {/* Upload Button */}
-      <button
-        onClick={handleUpload}
-        className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-2 rounded shadow"
-      >
-        {loading ? "Analyzing..." : "Predict Defect"}
-      </button>
+          {/* Analyze Button */}
+          <button
+            onClick={handleUpload}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded"
+          >
+            {loading ? "Analyzing..." : "Detect Defect"}
+          </button>
 
-      {/* Loading Text */}
-      {loading && (
-        <div className="mt-4 text-gray-700 animate-pulse">
-          ⏳ Checking fabric...
+          {/* Loading Animation */}
+          {loading && (
+            <p className="mt-4 text-sm text-gray-500 animate-pulse">🔍 Scanning fabric for defects...</p>
+          )}
+
+          {/* Result Box */}
+          {prediction && (
+            <div className="mt-6 bg-gray-50 p-4 rounded-lg border text-center">
+              <h3 className="text-lg font-semibold">
+                Result 🧵:{' '}
+                <span className={`font-bold ${prediction.prediction === "defective" ? "text-red-600" : "text-green-600"}`}>
+                  {prediction.prediction.toUpperCase()}
+                </span>
+              </h3>
+              <p className="mt-2 text-gray-700">
+                Confidence 📈: {prediction.confidence}%
+              </p>
+            </div>
+          )}
         </div>
-      )}
-
-      {/* Prediction Result */}
-      {prediction && (
-        <div className="mt-6 bg-white p-4 rounded shadow-lg text-center max-w-md w-full">
-          <h2 className="text-xl font-semibold pt-4">
-            Result 🔍:{" "}
-            <span
-              className={`font-bold ${
-                prediction.prediction === "defective"
-                  ? "text-red-600"
-                  : "text-green-600"
-              }`}
-            >
-              {prediction.prediction.toUpperCase()}
-            </span>
-          </h2>
-          <p className="text-gray-700 pt-4">
-            Confidence 📈: {prediction.confidence}%
-          </p>
-        </div>
-      )}
+      </div>
     </div>
   );
 };
