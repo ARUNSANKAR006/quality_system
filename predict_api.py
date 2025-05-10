@@ -35,18 +35,18 @@ def preprocess_image(image_bytes):
     except Exception as e:
         raise ValueError(f"Error processing image: {e}")
 
-def generate_gradcam(model, img_array, base_model_name="mobilenetv2_1.00_224", conv_layer_name="out_relu"):
+def generate_gradcam(model, img_array, conv_layer_name="mobilenetv2_1.00_224"):
     try:
-        # Get base model
-        base_model = model.get_layer(base_model_name)
-        
-        # Call base_model at least once to build it
-        _ = base_model(img_array)
+        # Run a prediction once to build the model layers (important fix)
+        _ = model(img_array)
 
-        # Get the last conv layer from base_model
-        last_conv_layer = base_model.get_layer(conv_layer_name)
+        # Get the base model
+        base_model = model.get_layer(conv_layer_name)
 
-        # Grad model from full model input to conv_output and model output
+        # Get the last conv layer inside the base model
+        last_conv_layer = base_model.get_layer("out_relu")
+
+        # Create a model that maps the input image to the activations of the last conv layer and the output
         grad_model = tf.keras.models.Model(
             [model.inputs],
             [last_conv_layer.output, model.output]
@@ -72,6 +72,7 @@ def generate_gradcam(model, img_array, base_model_name="mobilenetv2_1.00_224", c
 
     except Exception as e:
         raise RuntimeError(f"Error generating Grad-CAM: {e}")
+
 
 
 
