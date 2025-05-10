@@ -1,16 +1,16 @@
-// src/App.jsx
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LoginSignup from './components/Auth/LoginSignUp';
-import ImageUpload from './components/ImageUpload';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginSignup from "./components/Auth/LoginSignUp";
+import ImageUpload from "./components/ImageUpload";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/" element={<LoginSignup />} />
         <Route path="/upload" element={<ImageUpload />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
