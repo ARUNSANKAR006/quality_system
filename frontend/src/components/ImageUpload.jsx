@@ -61,9 +61,7 @@ const ImageUpload = () => {
         <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-xl text-center">
           {/* Header */}
           <div className="flex flex-col items-center mb-6">
-            <div className="text-indigo-600 text-4xl mb-2">
-              🧵
-            </div>
+            <div className="text-indigo-600 text-4xl mb-2">🧵</div>
             <h2 className="text-2xl font-bold">Textile Defect Inspection</h2>
             <p className="text-gray-500 mt-1 text-sm">
               Upload a fabric image to check for defects using AI.
@@ -122,6 +120,18 @@ const ImageUpload = () => {
               <p className="mt-2 text-gray-700">
                 Confidence 📈: {prediction.confidence}%
               </p>
+
+              {/* Grad-CAM Heatmap Display */}
+              {prediction.heatmap_path && (
+                <div className="mt-4">
+                  <h4 className="text-sm font-semibold text-gray-600 mb-1">📍 Defect Localization (Grad-CAM)</h4>
+                  <img
+                    src={`http://localhost:5000${prediction.heatmap_path}`}
+                    alt="Grad-CAM Heatmap"
+                    className="w-64 h-64 mx-auto rounded-lg border shadow"
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
