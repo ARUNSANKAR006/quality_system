@@ -1,0 +1,20 @@
+🔥 WOW Factors to Add:
+1.Live Camera Detection – Allow users to capture fabric photos directly from webcam/mobile and get instant results.
+
+2.Defect Type Classification – Instead of just “defective,” show what type (e.g., hole, stain, misweave) using multiclass prediction.
+
+3.Voice Feedback – Add a voice assistant that speaks out results (e.g., “No defects found” or “Defect detected in top-right corner”).
+
+4.Prediction Confidence Meter – Show a circular progress bar or gauge that indicates model confidence.
+
+5.Interactive Grad-CAM Heatmaps – Allow users to hover over or zoom into defect areas for detailed view.
+
+6.Performance Analytics Dashboard – Include charts showing weekly/monthly defect trends, fabric quality scores, etc.
+
+7.Dark/Light Mode Toggle – A slick UI feature to make your dashboard visually modern.
+
+8.Mobile Responsiveness – Optimize UI for mobile viewing and add installable PWA support.
+
+9.Multilingual Support – Provide results and UI in Tamil and English.
+
+10.PDF Report Download – Generate a downloadable inspection report with the image, heatmap, and prediction results.
