@@ -14,7 +14,7 @@ const Login = () => {
   return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-center"
-      style={{ backgroundImage: "url('/bg-textile.jpg')" }}
+      style={{ backgroundImage: "url('/bg_image.jpg')" }}
     >
       <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-md w-full max-w-sm">
         <h2 className="text-center text-2xl font-semibold mb-6">Login</h2>
