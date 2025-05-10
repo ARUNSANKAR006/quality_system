@@ -1,90 +1,83 @@
 import React, { useState } from 'react';
-import { color, motion } from 'framer-motion';
-import { UploadCloud, LoaderCircle } from 'lucide-react';
 
-export default function ImageUpload() {
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [result, setResult] = useState(null);
+const ImageUpload = () => {
+  const [image, setImage] = useState(null);
+  const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = (e) => {
-    const selected = e.target.files[0];
-    setFile(selected);
-    setPreview(URL.createObjectURL(selected));
-    setResult(null);
+    setImage(e.target.files[0]);
+    setPrediction(null);
   };
 
   const handleUpload = async () => {
-    if (!file) return;
+    if (!image) return alert("Please select an image");
+
     setLoading(true);
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", image);
 
     try {
-      const res = await fetch('http://localhost:5000/predict', {
-        method: 'POST',
-        body: formData,
+      const res = await fetch("http://localhost:5000/predict", {
+        method: "POST",
+        body: formData
       });
+
       const data = await res.json();
-      setResult(data);
-    } catch (err) {
-      alert('Prediction failed. Please check backend!');
+      setPrediction(data);
+    } catch (error) {
+      console.error("Prediction failed:", error);
+      alert("Prediction failed");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-white to-green-100 flex flex-col items-center justify-center px-4">
-      <motion.div
-        className="bg-white shadow-2xl rounded-2xl p-8 max-w-md w-full"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+    <div className="flex flex-col items-center p-8 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold mb-4">🧠 Fabric Defect Detector</h1>
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        className="mb-4"
+      />
+
+      {image && (
+        <img
+          src={URL.createObjectURL(image)}
+          alt="Uploaded"
+          className="w-64 h-64 object-cover mb-4 rounded shadow"
+        />
+      )}
+
+      <button
+        onClick={handleUpload}
+        className="bg-blue-600 hover:bg-blue-800 text-white px-6 py-2 rounded shadow"
       >
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">Defect Detection</h1>
+        {loading ? "Analyzing..." : "Predict Defect"}
+      </button>
 
-        <label className="cursor-pointer flex flex-col items-center justify-center border-2 border-dashed border-gray-300 py-6 rounded-xl mb-4 hover:bg-gray-50">
-          <UploadCloud className="w-8 h-8 text-blue-600 mb-2" />
-          <span className="text-gray-600">Click to select an image</span>
-          <input type="file" className="hidden" onChange={handleFileChange} />
-        </label>
+      {loading && (
+        <div className="mt-4 text-gray-700 animate-pulse">
+          ⏳ Checking fabric...
+        </div>
+      )}
 
-        {preview && (
-          <motion.img
-            key={preview}
-            src={preview}
-            alt="Preview"
-            className="w-full h-48 object-contain mb-4 rounded-lg border border-gray-200"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          />
-        )}
-
-        <button
-          onClick={handleUpload}
-          className="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-xl font-semibold transition duration-300 flex items-center justify-center"
-        >
-          {loading ? <LoaderCircle className="animate-spin mr-2" /> : null}
-          {loading ? 'Predicting...' : 'Predict'}
-        </button>
-
-        {result && (
-          <motion.div
-            className={`mt-6 text-center p-4 rounded-xl ${
-              result.prediction === 'defective' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
-            }`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <p className="text-xl font-semibold">{result.prediction.toUpperCase()}</p>
-            <p className="text-sm">Confidence: {(result.confidence * 100).toFixed(2)}%</p>
-          </motion.div>
-        )}
-      </motion.div>
+      {prediction && (
+        <div className="mt-6 bg-white p-4 rounded shadow-lg text-center">
+          <h2 className="text-xl font-semibold" style={{paddingTop:20}}>
+            Result 🔍:{" "}
+            <span className={`font-bold ${prediction.prediction === "defective" ? "text-red-600" : "text-green-600"}`}>
+              {prediction.prediction.toUpperCase()}
+            </span>
+          </h2>
+          <p className="text-gray-700" style={{paddingTop:20}}>Confidence 📈: {prediction.confidence}%</p>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default ImageUpload;
