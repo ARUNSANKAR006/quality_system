@@ -17,6 +17,8 @@ try:
     print(f"✅ Model loaded successfully from: {MODEL_PATH}")
     
     base_model = model.get_layer('mobilenetv2_1.00_224')
+    
+    last_conv_layer = base_model.get_layer('out_relu')
     #for i, layer in enumerate(base_model.layers):
         #print(f"{i}: {layer.name}")*/
         
@@ -41,10 +43,12 @@ def preprocess_image(image_bytes):
     except Exception as e:
         raise ValueError(f"Error processing image: {e}")
 
-def generate_gradcam(model, img_array, last_conv_layer_name="Conv_1"):
+def generate_gradcam(model, img_array, last_conv_layer_name="out_relu"):
     try:
+        last_conv_layer = model.get_layer(last_conv_layer_name)
+        
         grad_model = tf.keras.models.Model(
-            [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
+            [model.inputs], [last_conv_layer.output, model.output]
         )
 
         with tf.GradientTape() as tape:
