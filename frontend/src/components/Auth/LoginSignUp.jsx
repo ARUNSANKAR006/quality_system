@@ -11,7 +11,7 @@ function LoginSignUp() {
   const handleLogin = async () => {
     setErrorMsg('');
     try {
-      const res = await fetch('http://localhost:5000/login', {
+      const res = await fetch('http://localhost:7000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ function LoginSignUp() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/register', {
+      const res = await fetch('http://localhost:7000/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
