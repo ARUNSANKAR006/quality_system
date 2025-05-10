@@ -17,8 +17,8 @@ try:
     print(f"✅ Model loaded successfully from: {MODEL_PATH}")
     
     base_model = model.get_layer('mobilenetv2_1.00_224')
-    for i, layer in enumerate(base_model.layers):
-        print(f"{i}: {layer.name}")
+    #for i, layer in enumerate(base_model.layers):
+        #print(f"{i}: {layer.name}")*/
         
         
 except Exception as e:
@@ -41,7 +41,7 @@ def preprocess_image(image_bytes):
     except Exception as e:
         raise ValueError(f"Error processing image: {e}")
 
-def generate_gradcam(model, img_array, last_conv_layer_name="conv_1_relu"):
+def generate_gradcam(model, img_array, last_conv_layer_name="Conv_1"):
     try:
         grad_model = tf.keras.models.Model(
             [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
