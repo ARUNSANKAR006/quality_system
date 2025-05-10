@@ -116,18 +116,26 @@ const ImageUpload = () => {
             <div className="mt-6 bg-gray-50 p-4 rounded-lg border text-center">
               <h3 className="text-lg font-semibold">
                 Result 🧵:{' '}
-                <span className={`font-bold ${prediction.prediction === "defective" ? "text-red-600" : "text-green-600"}`}>
-                  {prediction.prediction.toUpperCase()}
+                <span
+                  className={`font-bold ${
+                    prediction?.prediction?.toLowerCase() === "defective"
+                      ? "text-red-600"
+                      : "text-green-600"
+                  }`}
+                >
+                  {prediction?.prediction?.toUpperCase?.() || "Unknown"}
                 </span>
               </h3>
               <p className="mt-2 text-gray-700">
-                Confidence 📈: {prediction.confidence}%
+                Confidence 📈: {prediction?.confidence ? `${prediction.confidence}%` : "N/A"}
               </p>
 
               {/* Grad-CAM Heatmap Display */}
-              {prediction.heatmap_path && (
+              {prediction?.heatmap_path && (
                 <div className="mt-4">
-                  <h4 className="text-sm font-semibold text-gray-600 mb-1">📍 Defect Localization (Grad-CAM)</h4>
+                  <h4 className="text-sm font-semibold text-gray-600 mb-1">
+                    📍 Defect Localization (Grad-CAM)
+                  </h4>
                   <img
                     src={`http://localhost:5000${prediction.heatmap_path}`}
                     alt="Grad-CAM Heatmap"
@@ -141,10 +149,9 @@ const ImageUpload = () => {
           {/* Error Message */}
           {error && (
             <div className="mt-4 text-sm text-red-600 font-medium">
-                ❌ {error}
+              ❌ {error}
             </div>
           )}
-
         </div>
       </div>
     </div>

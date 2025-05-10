@@ -6,6 +6,7 @@ from PIL import Image
 import io
 import os
 import cv2
+import traceback
 
 app = Flask(__name__)
 CORS(app, resources={r"/predict": {"origins": "http://localhost:5173"}})
@@ -35,21 +36,33 @@ def preprocess_image(image_bytes):
     except Exception as e:
         raise ValueError(f"Error processing image: {e}")
 
-def generate_gradcam(model, img_array, conv_layer_name="mobilenetv2_1.00_224"):
+def generate_gradcam(model, img_array):
     try:
-        # Run a prediction once to build the model layers (important fix)
+        # Run model once to initialize
         _ = model(img_array)
 
-        # Get the base model
-        base_model = model.get_layer(conv_layer_name)
+        # Access nested base model if available
+        base_model = None
+        for layer in model.layers:
+            if isinstance(layer, tf.keras.Model) and 'mobilenetv2' in layer.name:
+                base_model = layer
+                break
 
-        # Get the last conv layer inside the base model
-        last_conv_layer = base_model.get_layer("out_relu")
+        if base_model is None:
+            raise ValueError("Base model (e.g., MobileNetV2) not found")
 
-        # Create a model that maps the input image to the activations of the last conv layer and the output
+        # Find last Conv2D layer inside base_model
+        for layer in reversed(base_model.layers):
+            if isinstance(layer, tf.keras.layers.Conv2D):
+                last_conv_layer_name = layer.name
+                break
+        else:
+            raise ValueError("No Conv2D layer found in base model")
+
+        # Create grad model
         grad_model = tf.keras.models.Model(
             [model.inputs],
-            [last_conv_layer.output, model.output]
+            [base_model.get_layer(last_conv_layer_name).output, model.output]
         )
 
         with tf.GradientTape() as tape:
@@ -72,6 +85,8 @@ def generate_gradcam(model, img_array, conv_layer_name="mobilenetv2_1.00_224"):
 
     except Exception as e:
         raise RuntimeError(f"Error generating Grad-CAM: {e}")
+
+
 
 
 
@@ -120,8 +135,10 @@ def predict():
         return jsonify(result)
 
     except Exception as e:
-        print(f"❌ Error in prediction: {str(e)}")
+        print("❌ Error in prediction:")
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
-
+    
+    
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
