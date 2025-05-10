@@ -9,7 +9,7 @@ from sklearn.utils.class_weight import compute_class_weight
 import tensorflow as tf
 
 # Step 1: Setup
-DATASET_DIR = 'dataset'  # must contain 'normal' and 'defective' subfolders
+DATASET_DIR = 'dataset_raw'  # must contain 'normal' and 'defective' subfolders
 BATCH_SIZE = 32
 IMAGE_SIZE = (224, 224)
 EPOCHS = 10
