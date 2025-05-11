@@ -18,3 +18,6 @@
 9.Multilingual Support – Provide results and UI in Tamil and English.
 
 10.PDF Report Download – Generate a downloadable inspection report with the image, heatmap, and prediction results.
+
+
+-------------------------------------------
