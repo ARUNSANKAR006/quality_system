@@ -61,6 +61,10 @@ const ImageUpload = () => {
         filter: "blur(2px)"
       }}></div>
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-purple-900/80 to-indigo-900/80"></div>
+      <div className="absolute top-0 left-0 w-96 h-96 bg-pink-500 opacity-20 rounded-full blur-3xl animate-float-slow -z-10" />
+      <div className="absolute bottom-20 right-0 w-96 h-96 bg-yellow-400 opacity-20 rounded-full blur-3xl animate-float-slower -z-10" />
+      <div className="absolute top-1/3 left-1/3 w-80 h-80 bg-gradient-to-tr from-rose-500 to-indigo-500 opacity-30 rounded-full blur-[100px] animate-spin-slow -z-10" />
+
 
       {/* Header */}
       <div className="w-full max-w-6xl flex justify-between items-center mb-8 z-10">
