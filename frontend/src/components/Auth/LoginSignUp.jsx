@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './LoginSignUp.css';
+import './LoginSignUp.css'; // Ensure this contains the correct responsive styles.
 
 function LoginSignUp() {
   const navigate = useNavigate();
@@ -66,13 +66,14 @@ function LoginSignUp() {
   return (
     <div className="login-signup-container">
       <h1>Login or SignUp</h1>
-      <form onSubmit={e => e.preventDefault()}>
+      <form onSubmit={e => e.preventDefault()} className="w-full max-w-md p-6 bg-black bg-opacity-60 rounded-lg">
         <input
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder="Email"
           required
+          className="input-field"
         />
         <input
           type="password"
@@ -80,11 +81,24 @@ function LoginSignUp() {
           onChange={e => setPassword(e.target.value)}
           placeholder="Password"
           required
+          className="input-field"
         />
-        <button type="button" onClick={handleLogin}>Login</button>
-        <h5 className='h5'>Don't have an account ?</h5>
-        <button className="signup" type="button" onClick={handleSignup}>Sign Up</button>
-        {errorMsg && <p className="error-msg">❌ {errorMsg}</p>}
+        <button 
+          type="button" 
+          onClick={handleLogin} 
+          className="btn-primary"
+        >
+          Login
+        </button>
+        <h5 className="h5 text-white mt-4">Don't have an account?</h5>
+        <button 
+          className="btn-secondary" 
+          type="button" 
+          onClick={handleSignup}
+        >
+          Sign Up
+        </button>
+        {errorMsg && <p className="error-msg">{errorMsg}</p>}
       </form>
     </div>
   );
