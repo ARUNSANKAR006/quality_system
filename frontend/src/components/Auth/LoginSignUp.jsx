@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './LoginSignUp.css'; // Ensure this contains the correct responsive styles.
+import './LoginSignUp.css'; // Make sure the styles are defined properly
 
 function LoginSignUp() {
   const navigate = useNavigate();
@@ -13,14 +13,10 @@ function LoginSignUp() {
     try {
       const res = await fetch('http://localhost:7000/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-
       const data = await res.json();
-
       if (res.ok) {
         navigate('/image-upload');
       } else {
@@ -34,24 +30,17 @@ function LoginSignUp() {
 
   const handleSignup = async () => {
     setErrorMsg('');
-
-    // ✅ Password length validation
     if (password.length < 8) {
       setErrorMsg('Password must be at least 8 characters long');
       return;
     }
-
     try {
       const res = await fetch('http://localhost:7000/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-
       const data = await res.json();
-
       if (res.ok) {
         alert('Registration successful! You can now login.');
       } else {
@@ -65,41 +54,35 @@ function LoginSignUp() {
 
   return (
     <div className="login-signup-container">
-      <h1>Login or SignUp</h1>
-      <form onSubmit={e => e.preventDefault()} className="w-full max-w-md p-6 bg-black bg-opacity-60 rounded-lg">
-        <input
-          type="email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-          className="input-field"
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-          className="input-field"
-        />
-        <button 
-          type="button" 
-          onClick={handleLogin} 
-          className="btn-primary"
-        >
-          Login
-        </button>
-        <h5 className="h5 text-white mt-4">Don't have an account?</h5>
-        <button 
-          className="btn-secondary" 
-          type="button" 
-          onClick={handleSignup}
-        >
-          Sign Up
-        </button>
-        {errorMsg && <p className="error-msg">{errorMsg}</p>}
-      </form>
+      <div className="form-box">
+        <h1 className="form-title">Login or SignUp</h1>
+        <form onSubmit={e => e.preventDefault()} className="form-body">
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+            className="input-field"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+            className="input-field"
+          />
+          <button type="button" onClick={handleLogin} className="btn-primary">
+            Login
+          </button>
+          <h5 className="text-white mt-4">Don't have an account?</h5>
+          <button type="button" onClick={handleSignup} className="btn-secondary">
+            Sign Up
+          </button>
+          {errorMsg && <p className="error-msg">{errorMsg}</p>}
+        </form>
+      </div>
     </div>
   );
 }

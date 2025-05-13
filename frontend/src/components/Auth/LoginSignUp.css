@@ -1,94 +1,81 @@
-body{
-    margin: 0;
-    
-
+*{
+  margin:0;
 }
 
-
-/* Apply the background image to the whole page */
+/* Make background image cover full screen */
 .login-signup-container {
-  background-image: url('C:\project\quality_system\frontend\src\assets\background.jpg');  /* Path to your background image */
+  min-height: 100vh;
+  background-image: url('C:\project\quality_system\frontend\src\assets\background.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
-  height: 100vh; /* Make sure the background covers the full height */
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  color: white; /* Change the text color to ensure readability */
-  font-family: Arial, sans-serif;
-  text-align: center;
+  padding: 1rem;
 }
 
-.login-signup-container h1 {
-  margin-bottom: 20px;
-  border: solid 1px black;
-  background-color:black;
-  color:gray;
-  border-radius: 20px;
-  width: 20%;
-  height: 50px;
-  text-align: center;
-  padding-top: 10px;
-}
-
-form {
-  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background for form */
-  width: 20%; 
-  height: 25%;
-  padding: 30px;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
-}
-
-input {
-  display: block;
+/* Centered form card */
+.form-box {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  margin-top: 5px;
-  margin-left: 1px;
-  padding-right: 5px;
-  padding-left: 1%;
-  border-radius: 5px;
-  border: none;
-  font-size: 16px;
-  
-  
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
 }
 
-button {
-  display: inline-block;
-  background-color: purple;
+/* Title styling */
+.form-title {
   color: white;
-  margin-top:2px ;
-  padding: 10px 20px;
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+/* Form fields */
+.input-field {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
   border: none;
-  border-radius: 5px;
+  outline: none;
+  font-size: 1rem;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
-  justify-content: space-between;
-  margin: 5px;
+  color: white;
+  transition: background 0.3s;
 }
 
-button:hover {
-  background-color: purple;
-  background-blend-mode: lighten;
+.btn-primary {
+  background-color: #800080;
 }
 
-.h5{
-    
-    font-weight: 10px;
-    margin-right: 150px;
-    font-size:smaller;
-    color: white;
+.btn-primary:hover {
+  background-color: #5a005a;
 }
 
-.signup{
-    position: relative;
-    left: 70px;
-    bottom: 55px;
+.btn-secondary {
+  background-color: #a100a1;
+}
+
+.btn-secondary:hover {
+  background-color: #7b007b;
+}
+
+.error-msg {
+  color: red;
+  margin-top: 0.5rem;
+  text-align: center;
 }
