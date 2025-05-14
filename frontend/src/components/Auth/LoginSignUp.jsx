@@ -53,7 +53,7 @@ function LoginSignUp() {
   };
 
   return (
-    <div className="min-h-screen bg-[url( add your image copy address)] bg-cover bg-no-repeat flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-[url('C:\project\quality_system\frontend\src\assets\background.jpg')] bg-cover bg-no-repeat flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full bg-slate-800 rounded-xl shadow-2xl border border-slate-700 overflow-hidden">
         {/* Header */}
         <div className="p-8 pb-6 text-center">
