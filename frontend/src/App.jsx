@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginSignUp from './components/Auth/LoginSignUp'; // Adjust the path as needed
 import ImageUpload from './components/ImageUpload'; // Adjust the path as needed
 import ResultPage from './components/ResultPage';
-
+import './index.css'; // Adjust the path as needed
 function App() {
   return (
     <Router>
