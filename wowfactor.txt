@@ -20,4 +20,4 @@
 10.PDF Report Download – Generate a downloadable inspection report with the image, heatmap, and prediction results.
 
 
--------------------------------------------
+-----------------------------------------
